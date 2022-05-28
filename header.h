@@ -6,6 +6,8 @@
 #include <QList>
 #include <QFile>
 
+
+
 // Структура сотрудника
 struct employee
 {
@@ -35,4 +37,6 @@ int outputError(int error);
  *
  *
  */
- void getInputDatas();
+void getInputDatas(QString txt);
+
+int getInputID(QString txt);

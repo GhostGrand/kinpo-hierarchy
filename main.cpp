@@ -7,6 +7,7 @@
 #include <QDir>
 #include "header.h"
 
+
 // Объявление входного .xml файла
 QString locationXml = QDir::currentPath();  // Расположение входного .xml файла             // сунуть в глобальные переменные  inputXml и inputTxt
 QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     getInputDatas();
+    getInputID("dfdf");
 
     // Выполнение проверки входных данных
     try {
@@ -96,5 +98,10 @@ void getInputDatas()
     // Объявление входного .txt файла
     QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла             // сунуть в отдельную функцию input
     QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
+
+}
+
+int getInputId(QString txt)
+{
 
 }
