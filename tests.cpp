@@ -11,7 +11,7 @@ tests::tests(QObject *parent) : QObject(parent)
 //    outputError(1)
 //}
 
-//Проверка входного ID на корректность
+// проверка входного ID на корректность
 void tests::testGetInputID()
 {
     int ID = getInputID("25");
@@ -21,17 +21,26 @@ void tests::testGetInputID()
 
 }
 
+// проверка получения входного .xml файла
 void tests::testGetInputXmlDatasToStructs()
 {
 
 }
 
 
-
+// проверка получения ФИО сотрудника
 void tests::testGetFIOEmployee()
 {
 
 }
+
+// проверка получения ошибок
+void tests::testGetOutputError()
+{
+
+}
+
+
 
 
 
