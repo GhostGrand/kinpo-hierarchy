@@ -11,11 +11,14 @@ tests::tests(QObject *parent) : QObject(parent)
 //    outputError(1)
 //}
 
+//Проверка входного ID на корректность
 void tests::testGetInputID()
 {
     int ID = getInputID("25");
     int expectedID = 25;
     QVERIFY2(ID == expectedID, "work");
+    QVERIFY2(ID != expectedID, "not work");
+
 }
 
 void tests::testGetInputXmlDatasToStructs()

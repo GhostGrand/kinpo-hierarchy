@@ -2,7 +2,7 @@
 #define TESTS_H
 
 #include <QObject>
-#include "header.h"
+//#include "header.h"
 
 class tests : public QObject
 {

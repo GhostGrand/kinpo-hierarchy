@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    getInputDatas();
+//    getInputDatas();
     getInputID("dfdf");
 
     // Выполнение проверки входных данных
