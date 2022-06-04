@@ -8,45 +8,56 @@
 #include "header.h"
 
 
-// Объявление входного .xml файла
-QString locationXml = QDir::currentPath();  // Расположение входного .xml файла             // сунуть в глобальные переменные  inputXml и inputTxt
-QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
-
-// Объявление входного .txt файла
-QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла             // сунуть в отдельную функцию input
-QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-//    getInputDatas();
-    getInputID("dfdf");
+    // Объявление входного .xml файла
+    QString locationXml = QDir::currentPath();  // Расположение входного .xml файла
+    QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");
+
+    // Объявление входного .txt файла
+    QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла
+    QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
+
+    employee fioElmployee;
+    employee idEmployee;
+    employee departmentAffiliation;
 
     // Выполнение проверки входных данных
     try {
-        testInputDatas();
+        testInputDatas(locationXml, inputXml, locationTxt, inputTxt);
 
 
     }  catch (int error) {
         qDebug() << outputError(error);
-        inputXml.close();
-        inputTxt.close();
+        closeInputDatas(inputXml, inputTxt);
         return 0;
 
     }
 
 
+//    closeInputDatas(inputXml, inputTxt);
+
+    qDebug() << "work";
+
+    getInputID(inputTxt);
+
+    // получить ID пользователя
+    if (getInputID(inputTxt) == 0)  //если ID отсутствует - завершить программу и вернуть ошибку
     {
-        inputXml.close();
-        inputTxt.close();
-        qDebug() << "work";
+        return 0;
     }
+
+
+    // запарсить .xml файл
+    getInputXmlDatasToStructs(inputXml, fioElmployee, idEmployee, departmentAffiliation);
 
 }
 
 
-bool testInputDatas()           //через try catch
+bool testInputDatas(QString& locationXml, QFile& inputXml, QString& locationTxt, QFile& inputTxt)
 {
         // Проверка наличия входного файла .xml
         if (!inputXml.exists())
@@ -101,7 +112,42 @@ void getInputDatas()
 
 }
 
-int getInputId(QString txt)
+int getInputID(QFile& inputTxt)
+{
+
+    // входной ID
+    int inputID;
+    // объект класса, который хранит получившиеся строки
+    QString idDatas;
+    if (!inputTxt.open(QIODevice::ReadOnly))    // проверяем, возможно ли открыть .txt файл для чтения
+        return 0;
+    idDatas = inputTxt.readAll();   // записать полученную строку в idDatas
+    qDebug() << idDatas;    // вывести в консоль idDatas
+
+    // проверить корректность входных данных
+    for (int i = 0; i < idDatas.length(); i++)
+    {
+        if (!idDatas[i].isDigit())  // если символ не число
+        {
+            qDebug() << "incorrect ID";
+            return 0;   // вернуть 0 и вывести ошибку
+        }
+    }
+
+
+    inputID = idDatas.toInt();
+    return inputID;
+
+}
+
+void closeInputDatas(QFile& inputXml, QFile& inputTxt)
+{
+    inputXml.close();
+    inputTxt.close();
+}
+
+
+void getInputXmlDatasToStructs(QString xml, QList<struct structEmployee> &employeeList, QList<struct structDepartment> &departmentList)
 {
 
 }

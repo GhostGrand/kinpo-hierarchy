@@ -29,7 +29,7 @@ struct department
 /*! Проверка входных данных (.xml и .txt файлов)
 *   \return true, false
 */
-bool testInputDatas();
+bool testInputDatas(QString& locationXml, QFile& inputXml, QString& locationTxt, QFile& inputTxt);
 
 /*! Вывод ошибок входных данных
 *   \param[in] error        // ошибка
@@ -40,14 +40,14 @@ int outputError(int error);
 /*! Получение входных данных
  *  \param[in] txt          // входная строка
  */
-void getInputDatas(QString txt);
+void getInputDatas();
 
 
 /*! Получение входного ID сотрудника
  *  \param[in] txt          // входная строка
  *  \return int             // ID сотрудника
  */
-int getInputID(QString txt);
+int getInputID(QFile& inputTxt);
 
 /*! Получение .xml файла и запись данных в массивы структур
  * \param[in] xml               // .xml файл
@@ -62,3 +62,5 @@ void getInputXmlDatasToStructs(QString xml, QList<struct structEmployee> &employ
  * \return                      // строка - ФИО сотрудника
  */
 QString getFIOEmployee(int idEmployee, QList<struct structEmployee> &employeeList);
+
+void closeInputDatas(QFile& inputXml, QFile& inputTxt);
