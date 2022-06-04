@@ -11,7 +11,7 @@
 // Структура сотрудника
 struct employee
 {
-   QString fioEmployee; // ФИО сотрудника
+   QString fioElmployee; // ФИО сотрудника
    int idEmployee;  // ID сотрудника
    int departmentAffiliation;    // принадлежность сотрудника к подразделению
 };
@@ -54,7 +54,7 @@ int getInputID(QFile& inputTxt);
  * \param[in] employeeList      // массив структур employeeList
  * \param[in] departmentList    // массив структур departmentList
  */
-void getInputXmlDatasToStructs(QString xml, QList<struct structEmployee> &employeeList, QList<struct structDepartment> &departmentList);
+void getInputXmlDatasToStructs(QFile& inputXml, QList<struct structEmployee> &employeeList, QList<struct structDepartment> &departmentList);
 
 /*! Получение ФИО сотрудника по его ID
  * \param[in] idEmployee        // ID сотрудника
