@@ -11,9 +11,9 @@
 // Структура сотрудника
 struct employee
 {
-   QString fioElmployee; // ФИО сотрудника
+   QString fioEmployee; // ФИО сотрудника
    int idEmployee;  // ID сотрудника
-   int departmentAffiliation;    // принадлежность сотрудника к подразделению
+   QString departmentAffiliation;    // принадлежность сотрудника к подразделению
 };
 
 // Структура подразделения (отдела)

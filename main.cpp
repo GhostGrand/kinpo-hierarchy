@@ -13,19 +13,19 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    // Объявление входного .xml файла
-    QString locationXml = QDir::currentPath();  // Расположение входного .xml файла
-    QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");
+    // объявление входного .xml файла
+    QString locationXml = QDir::currentPath();  // расположение входного .xml файла
+    QFile inputXml(locationXml + "..\\..\\kinpo-hierarchy\\input.xml");
 
-    // Объявление входного .txt файла
-    QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла
-    QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
+    // объявление входного .txt файла
+    QString locationTxt = QDir::currentPath();  // расположение входного .txt файла
+    QFile inputTxt(locationTxt + "..\\..\\kinpo-hierarchy\\input2.txt");
 
-    QList<struct employee> employeeList;
-    QList<struct department> departmentList;
+    QList<struct employee> employeeList;    // массив структур сотрудников
+    QList<struct department> departmentList;    // массив структур подразделений
 
 
-    // Выполнение проверки входных данных
+    // выполнение проверки входных данных
     try {
         testInputDatas(locationXml, inputXml, locationTxt, inputTxt);
 
@@ -37,19 +37,17 @@ int main(int argc, char *argv[])
 
     }
 
-
 //    closeInputDatas(inputXml, inputTxt);
 
-    qDebug() << "work";
+    qDebug() << "work, no input errors";
 
-    getInputID(inputTxt);
+//    getInputID(inputTxt);
 
     // получить ID пользователя
-    if (getInputID(inputTxt) == 0)  //если ID отсутствует - завершить программу и вернуть ошибку
+    if (getInputID(inputTxt) == 0)  // если ID отсутствует - завершить программу и вернуть ошибку
     {
         return 0;
     }
-
 
     // запарсить .xml файл
     getInputXmlDatasToStructs(inputXml, employeeList, departmentList);
@@ -71,6 +69,7 @@ bool testInputDatas(QString& locationXml, QFile& inputXml, QString& locationTxt,
         {
             //puts("invalid input data: unable to read .xml file");
             throw 2;
+
         }
 
         // Проверка наличия входного файла .txt
@@ -86,6 +85,8 @@ bool testInputDatas(QString& locationXml, QFile& inputXml, QString& locationTxt,
             //puts("invalid input data: .txt file is empty");
             throw 4;
         }
+
+        inputXml.close();   // закрыть .xml файл
 }
 
 int outputError(int error)
@@ -104,11 +105,11 @@ void getInputDatas()
 {
     // Объявление входного .xml файла
     QString locationXml = QDir::currentPath();  // Расположение входного .xml файла             // сунуть в глобальные переменные  inputXml и inputTxt
-    QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
+    QFile inputXml(locationXml + "..\\..\\kinpo-hierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
 
     // Объявление входного .txt файла
     QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла             // сунуть в отдельную функцию input
-    QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
+    QFile inputTxt(locationTxt + "..\\..\\kinpo-hierarchy\\input2.txt");
 
 }
 
@@ -149,5 +150,52 @@ void closeInputDatas(QFile& inputXml, QFile& inputTxt)
 
 void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList)
 {
+    if (!inputXml.open(QIODevice::ReadOnly))    // проверяем, возможно ли открыть .xml файл для чтения
+        qDebug() << "Error: can't read .xml file";  // вывести в консоль ошибку, что файл открыть невозможно
+
+    QByteArray buff = inputXml.readAll();
+    QDomDocument doc;
+
+    // проверить, что .xml файл не пустой
+    if (false == doc.setContent(buff))
+        qDebug() << "bad XML-file: setContent";
+//        throw QString("bad XML-file: setContent");
+
+    QDomElement root = doc.documentElement();
+      if (root.tagName() != "Department")
+          qDebug() << "bad XML-file: tagname() != Department";
+//        throw QString("bad XML-file: tagname() != Department");
+
+    QDomNode record_node = root.firstChild();
+    while (false == record_node.isNull())
+    {
+      if (record_node.toElement().tagName() != "Employee")
+      {
+          break;
+          qDebug() << "bad XML-file: tagname() != Employee";
+      }
+//        throw QString("bad XML-file: tagname() != Employee");
+
+
+      employee employeeInfo;
+      // получить ФИО
+      employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
+
+      // получить ID сотрудника | принадлежность к отделу
+      employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
+
+      // получить название отдела
+      employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
+
+      // записать полученные ФИО, ID, название отдела в структуру employeeList
+      employeeList.append(employeeInfo);
+
+      record_node = record_node.nextSibling();
+    }
+
+    // удалить дебаги
+    qDebug() << employeeList[0].fioEmployee;
+    qDebug() << employeeList[0].idEmployee;
+    qDebug() << employeeList[0].departmentAffiliation;
 
 }
