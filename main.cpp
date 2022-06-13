@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла
     QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
 
-    QList<struct employee> employee;
-    QList<struct structDepartment> departmentList;
+    QList<struct employee> employeeList;
+    QList<struct department> departmentList;
 
 
     // Выполнение проверки входных данных
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 
     // запарсить .xml файл
-    getInputXmlDatasToStructs(inputXml, employee, departmentList);
+    getInputXmlDatasToStructs(inputXml, employeeList, departmentList);
 
 }
 
@@ -147,7 +147,7 @@ void closeInputDatas(QFile& inputXml, QFile& inputTxt)
 }
 
 
-void getInputXmlDatasToStructs(QFile& inputXml, QList<struct structEmployee> &employeeList, QList<struct structDepartment> &departmentList)
+void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList)
 {
 
 }

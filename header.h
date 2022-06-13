@@ -54,13 +54,13 @@ int getInputID(QFile& inputTxt);
  * \param[in] employeeList      // массив структур employeeList
  * \param[in] departmentList    // массив структур departmentList
  */
-void getInputXmlDatasToStructs(QFile& inputXml, QList<struct structEmployee> &employeeList, QList<struct structDepartment> &departmentList);
+void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList);
 
 /*! Получение ФИО сотрудника по его ID
  * \param[in] idEmployee        // ID сотрудника
  * \param[in] employeeList      // список сотрудников
  * \return                      // строка - ФИО сотрудника
  */
-QString getFIOEmployee(int idEmployee, QList<struct structEmployee> &employeeList);
+QString getFIOEmployee(int idEmployee, QList<struct employee> &employeeList);
 
 void closeInputDatas(QFile& inputXml, QFile& inputTxt);
