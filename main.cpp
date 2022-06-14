@@ -50,8 +50,36 @@ int main(int argc, char *argv[])
     }
 
     // запарсить .xml файл
-    getInputXmlDatasToStructs(inputXml, employeeList, departmentList);
+    getAllContentFromXml(inputXml, employeeList, departmentList);
+    qDebug() << " ";
+    qDebug() << employeeList[0].fioEmployee;
+    qDebug() << employeeList[0].idEmployee;
+    qDebug() << employeeList[0].departmentAffiliation;
+    qDebug() << " ";
 
+    qDebug() << employeeList[1].fioEmployee;
+    qDebug() << employeeList[1].idEmployee;
+    qDebug() << employeeList[1].departmentAffiliation;
+    qDebug() << " ";
+    qDebug() << employeeList[2].fioEmployee;
+    qDebug() << employeeList[2].idEmployee;
+    qDebug() << employeeList[2].departmentAffiliation;
+    qDebug() << " ";
+    qDebug() << employeeList[3].fioEmployee;
+    qDebug() << employeeList[3].idEmployee;
+    qDebug() << employeeList[3].departmentAffiliation;
+    qDebug() << " ";
+    qDebug() << employeeList[4].fioEmployee;
+    qDebug() << employeeList[4].idEmployee;
+    qDebug() << employeeList[4].departmentAffiliation;
+    qDebug() << " ";
+    qDebug() << employeeList[5].fioEmployee;
+    qDebug() << employeeList[5].idEmployee;
+    qDebug() << employeeList[5].departmentAffiliation;
+    qDebug() << " ";
+    qDebug() << employeeList[6].fioEmployee;
+    qDebug() << employeeList[6].idEmployee;
+    qDebug() << employeeList[6].departmentAffiliation;
 }
 
 
@@ -135,7 +163,6 @@ int getInputID(QFile& inputTxt)
         }
     }
 
-
     inputID = idDatas.toInt();
     return inputID;
 
@@ -147,8 +174,7 @@ void closeInputDatas(QFile& inputXml, QFile& inputTxt)
     inputTxt.close();
 }
 
-
-void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList)
+void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList)
 {
     if (!inputXml.open(QIODevice::ReadOnly))    // проверяем, возможно ли открыть .xml файл для чтения
         qDebug() << "Error: can't read .xml file";  // вывести в консоль ошибку, что файл открыть невозможно
@@ -157,45 +183,47 @@ void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employee
     QDomDocument doc;
 
     // проверить, что .xml файл не пустой
-    if (false == doc.setContent(buff))
+    if (doc.setContent(buff) == false)
         qDebug() << "bad XML-file: setContent";
-//        throw QString("bad XML-file: setContent");
 
     QDomElement root = doc.documentElement();
-      if (root.tagName() != "Department")
-          qDebug() << "bad XML-file: tagname() != Department";
-//        throw QString("bad XML-file: tagname() != Department");
+    if (root.tagName() != "Department")
+        qDebug() << "bad XML-file: tagname() != Department";
 
     QDomNode record_node = root.firstChild();
-    while (false == record_node.isNull())
+    while (record_node.isNull() == false)
     {
-      if (record_node.toElement().tagName() != "Employee")
-      {
-          break;
-          qDebug() << "bad XML-file: tagname() != Employee";
-      }
-//        throw QString("bad XML-file: tagname() != Employee");
-
-
-      employee employeeInfo;
-      // получить ФИО
-      employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
-
-      // получить ID сотрудника | принадлежность к отделу
-      employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
-
-      // получить название отдела
-      employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
-
-      // записать полученные ФИО, ID, название отдела в структуру employeeList
-      employeeList.append(employeeInfo);
-
-      record_node = record_node.nextSibling();
+        getInputXmlDatasToStructs(record_node, root, employeeList, departmentList);
+        record_node = record_node.nextSibling();
     }
-
-    // удалить дебаги
-    qDebug() << employeeList[0].fioEmployee;
-    qDebug() << employeeList[0].idEmployee;
-    qDebug() << employeeList[0].departmentAffiliation;
-
 }
+
+void getInputXmlDatasToStructs(QDomNode record_node, QDomNode root, QList<struct employee> &employeeList, QList<struct department> &departmentList)
+{
+//    QDomNode record_node = root.firstChild();
+
+    if (record_node.toElement().tagName() == "Employee")
+    {
+        employee employeeInfo;
+
+            // получить ФИО
+            employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
+
+            // получить ID сотрудника
+            employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
+
+            // получить название отдела | чтобы определить принадлежность к отделу
+            employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
+
+            // записать полученные ФИО, ID, название отдела в структуру employeeList
+            employeeList.append(employeeInfo);
+
+
+    }
+    else if(record_node.toElement().tagName() == "Department")
+    {
+        getInputXmlDatasToStructs(record_node.firstChild(), record_node, employeeList, departmentList);
+    }
+}
+
+

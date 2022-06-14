@@ -5,6 +5,7 @@
 #include <QString>
 #include <QList>
 #include <QFile>
+#include <QDomDocument>
 
 
 
@@ -54,7 +55,9 @@ int getInputID(QFile& inputTxt);
  * \param[in] employeeList      // массив структур employeeList
  * \param[in] departmentList    // массив структур departmentList
  */
-void getInputXmlDatasToStructs(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList);
+void getInputXmlDatasToStructs(QDomNode record_node, QDomNode root, QList<struct employee> &employeeList, QList<struct department> &departmentList);    // сюда заносить ноду
+
+void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList);
 
 /*! Получение ФИО сотрудника по его ID
  * \param[in] idEmployee        // ID сотрудника

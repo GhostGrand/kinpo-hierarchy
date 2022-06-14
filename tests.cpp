@@ -8,16 +8,17 @@
 
 ////void tests::getOutputError()
 ////{
-////    outputError(1)
+////    outputError(1);
 ////}
 
 //// проверка входного ID на корректность
 //void tests::testGetInputID()
 //{
-//    int ID = getInputID("25");
-//    int expectedID = 25;
+//    QFile input("..\\..\\kinpo-hierarchy\\input2.txt");
+//    int ID = getInputID(input);
+//    int expectedID = 1;
 //    QVERIFY2(ID == expectedID, "work");
-//    QVERIFY2(ID != expectedID, "not work");
+////    QVERIFY2(ID != expectedID, "not work");
 
 //}
 
