@@ -193,8 +193,10 @@ void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList,
     QDomNode record_node = root.firstChild();
     while (record_node.isNull() == false)
     {
+
         getInputXmlDatasToStructs(record_node, root, employeeList, departmentList);
-        record_node = record_node.nextSibling();
+
+        record_node = record_node.nextSibling();    //тут реализовать проход по всем <Employee>
     }
 }
 
@@ -206,17 +208,17 @@ void getInputXmlDatasToStructs(QDomNode record_node, QDomNode root, QList<struct
     {
         employee employeeInfo;
 
-            // получить ФИО
-            employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
+        // получить ФИО
+        employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
 
-            // получить ID сотрудника
-            employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
+        // получить ID сотрудника
+        employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
 
-            // получить название отдела | чтобы определить принадлежность к отделу
-            employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
+        // получить название отдела | чтобы определить принадлежность к отделу
+        employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
 
-            // записать полученные ФИО, ID, название отдела в структуру employeeList
-            employeeList.append(employeeInfo);
+        // записать полученные ФИО, ID, название отдела в структуру employeeList
+        employeeList.append(employeeInfo);
 
 
     }
