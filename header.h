@@ -57,6 +57,7 @@ int getInputID(QFile& inputTxt);
  */
 void getInputXmlDatasToStructs(QDomNode record_node, QDomNode root, QList<struct employee> &employeeList, QList<struct department> &departmentList);    // сюда заносить ноду
 
+
 void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList, QList<struct department> &departmentList);
 
 /*! Получение ФИО сотрудника по его ID
@@ -66,4 +67,9 @@ void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList,
  */
 QString getFIOEmployee(int idEmployee, QList<struct employee> &employeeList);
 
+/*! Закрыть входные .xml и .txt файлы
+ * \brief closeInputDatas
+ * \param[in] inputXml          // .xml файл
+ * \param[in] inputTxt          // .txt файл
+ */
 void closeInputDatas(QFile& inputXml, QFile& inputTxt);

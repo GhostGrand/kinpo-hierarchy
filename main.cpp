@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
 
     // объявление входного .xml файла
     QString locationXml = QDir::currentPath();  // расположение входного .xml файла
-    QFile inputXml(locationXml + "..\\..\\kinpo-hierarchy\\input.xml");
+    QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");
 
     // объявление входного .txt файла
     QString locationTxt = QDir::currentPath();  // расположение входного .txt файла
-    QFile inputTxt(locationTxt + "..\\..\\kinpo-hierarchy\\input2.txt");
+    QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
 
     QList<struct employee> employeeList;    // массив структур сотрудников
     QList<struct department> departmentList;    // массив структур подразделений
@@ -133,11 +133,11 @@ void getInputDatas()
 {
     // Объявление входного .xml файла
     QString locationXml = QDir::currentPath();  // Расположение входного .xml файла             // сунуть в глобальные переменные  inputXml и inputTxt
-    QFile inputXml(locationXml + "..\\..\\kinpo-hierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
+    QFile inputXml(locationXml + "..\\..\\kinpohierarchy\\input.xml");                          // использовать алгоритм Дейкстры:? глубь или ширина
 
     // Объявление входного .txt файла
     QString locationTxt = QDir::currentPath();  // Расположение входного .txt файла             // сунуть в отдельную функцию input
-    QFile inputTxt(locationTxt + "..\\..\\kinpo-hierarchy\\input2.txt");
+    QFile inputTxt(locationTxt + "..\\..\\kinpohierarchy\\input2.txt");
 
 }
 
@@ -203,28 +203,33 @@ void getAllContentFromXml(QFile& inputXml, QList<struct employee> &employeeList,
 void getInputXmlDatasToStructs(QDomNode record_node, QDomNode root, QList<struct employee> &employeeList, QList<struct department> &departmentList)
 {
 //    QDomNode record_node = root.firstChild();
-
-    if (record_node.toElement().tagName() == "Employee")
+    QDomNode node = record_node.firstChild();
+    while (node.isNull() == false)
     {
-        employee employeeInfo;
+        if (node.toElement().tagName() == "Employee")
+        {
+            employee employeeInfo;
 
-        // получить ФИО
-        employeeInfo.fioEmployee = QString::fromStdString(record_node.firstChild().nodeValue().toStdString());
+            // получить ФИО
+            employeeInfo.fioEmployee = QString::fromStdString(node.firstChild().nodeValue().toStdString());
 
-        // получить ID сотрудника
-        employeeInfo.idEmployee = QString::fromStdString(record_node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
+            // получить ID сотрудника
+            employeeInfo.idEmployee = QString::fromStdString(node.attributes().namedItem("id").nodeValue().toStdString()).toInt();
 
-        // получить название отдела | чтобы определить принадлежность к отделу
-        employeeInfo.departmentAffiliation = QString::fromStdString(root.attributes().namedItem("name").nodeValue().toStdString());
+            // получить название отдела | чтобы определить принадлежность к отделу
+            employeeInfo.departmentAffiliation = QString::fromStdString(record_node.attributes().namedItem("name").nodeValue().toStdString());
 
-        // записать полученные ФИО, ID, название отдела в структуру employeeList
-        employeeList.append(employeeInfo);
+            // записать полученные ФИО, ID, название отдела в структуру employeeList
+            employeeList.append(employeeInfo);
 
 
-    }
-    else if(record_node.toElement().tagName() == "Department")
-    {
-        getInputXmlDatasToStructs(record_node.firstChild(), record_node, employeeList, departmentList);
+        }
+        else if(node.toElement().tagName() == "Department")
+        {
+            getInputXmlDatasToStructs(node.firstChild(), node, employeeList, departmentList);
+        }
+
+        node = node.nextSibling();
     }
 }
 
